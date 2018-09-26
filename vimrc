@@ -26,14 +26,19 @@ set tags=~/.tags;
 set autochdir
 set foldmethod=indent
 set foldlevel=99
+set cursorline
 nnoremap <space> za
-map <F3> :tabp<CR>
-map <F4> :tabn<CR>
-map <F5> :call RunScripts()<CR>
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+nnoremap <F3> :tabp<CR>
+nnoremap <F4> :tabn<CR>
+nnoremap <F5> :call RunScripts()<CR>
 func! RunScripts()
     exec "w"
     if &filetype == 'python'
-        exec "!time python %"
+        exec "!time python3 %"
     elseif &filetype == 'sh'
         exec "!time bash %"
     elseif &filetype == 'html'
@@ -80,6 +85,10 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'w0rp/ale'
 Plugin 'nvie/vim-flake8'
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'kien/rainbow_parentheses.vim'
+Plugin 'Raimondi/delimitMate'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'terryma/vim-multiple-cursors'
 " }}}
 
 
@@ -214,13 +223,67 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 " }}}
 
 
-" Color {{{
+" Theme {{{
 set background=dark
 set guifont=Monaco\16
 colorscheme solarized
+let g:solarized_termcolors = 256
 highlight  LineNr      cterm=NONE        ctermbg=NONE       ctermfg=darkgrey   guibg=NONE        guifg=NONE
 highlight  Pmenu       cterm=NONE        ctermbg=black      ctermfg=lightblue  guibg=black       guifg=lightblue
 highlight  PmenuSel    ctermbg=black     ctermfg=darkgreen  guibg=black        guifg=lightgreen
 highlight  ColorColumn ctermbg=black     ctermfg=white      guibg=#ff4500
 highlight  OverLength  ctermbg=red       ctermfg=white      guibg=#592929
+" }}}
+
+
+" RainbowParentheses {{{
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
+let g:rbpt_max = 16
+let g:rbpt_loadcmd_toggle = 0
+autocmd VimEnter * RainbowParenthesesToggle
+autocmd Syntax * RainbowParenthesesLoadRound
+autocmd Syntax * RainbowParenthesesLoadSquare
+autocmd Syntax * RainbowParenthesesLoadBraces
+" }}}
+
+
+" Vim-multiple-cursors {{{
+let g:multi_cursor_use_default_mapping = 0
+let g:multi_cursor_start_key           = 'g<C-n>'
+let g:multi_cursor_select_all_key      = 'g<C-a>'
+let g:multi_cursor_start_word_key      = '<C-n>'
+let g:multi_cursor_select_all_word_key = '<C-a>'
+let g:multi_cursor_next_key            = '<C-n>'
+let g:multi_cursor_prev_key            = '<C-p>'
+let g:multi_cursor_skip_key            = '<C-x>'
+let g:multi_cursor_quit_key            = '<Esc>'
+highlight multiple_cursors_cursor term=reverse cterm=reverse gui=reverse
+highlight link multiple_cursors_visual Visual
+function! Multiple_cursors_before()
+  if exists(':NeoCompleteLock')==2
+    exe 'NeoCompleteLock'
+  endif
+endfunction
+
+function! Multiple_cursors_after()
+  if exists(':NeoCompleteUnlock')==2
+    exe 'NeoCompleteUnlock'
+  endif
+endfunction
 " }}}

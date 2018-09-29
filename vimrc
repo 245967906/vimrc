@@ -74,6 +74,7 @@ Plugin 'VundleVim/Vundle.vim'
 call vundle#end()
 filetype plugin indent on
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'davidhalter/jedi-vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'mattn/emmet-vim'
 Plugin 'Shougo/neocomplete.vim'
@@ -108,7 +109,22 @@ let g:ycm_filetype_blacklist = {
     \ 'html' : 1,
     \ 'css' : 1 }
 set completeopt=longest,menu
-noremap <C-]> :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" }}}
+
+
+" Jedi-vim {{{
+let g:jedi#auto_initialization = 1
+let g:jedi#completions_enabled = 1
+let g:jedi#popup_select_first = 0
+let g:jedi#popup_on_dot = 0
+let g:jedi#smart_auto_mappings = 0
+let g:jedi#goto_command = "<C-]>"
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = ""
+let g:jedi#documentation_command = "<leader>k"
+let g:jedi#usages_command = "<leader>n"
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#rename_command = "<leader>r"
 " }}}
 
 

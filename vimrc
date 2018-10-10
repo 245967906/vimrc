@@ -35,7 +35,7 @@ nnoremap <C-H> <C-W><C-H>
 nnoremap <F3> :tabp<CR>
 nnoremap <F4> :tabn<CR>
 nnoremap <F5> :call RunScripts()<CR>
-func! RunScripts()
+function! RunScripts()
     exec "w"
     if &filetype == 'python'
         exec "!time python3 %"
@@ -177,7 +177,7 @@ inoremap <expr><C-g>     neocomplete#undo_completion()
 inoremap <expr><C-l>     neocomplete#complete_common_string()
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function()
-  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+    return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
 endfunction
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
@@ -244,7 +244,7 @@ set background=dark
 set guifont=Monaco\16
 colorscheme solarized
 let g:solarized_termcolors = 256
-highlight  LineNr      cterm=NONE        ctermbg=NONE       ctermfg=darkgrey   guibg=NONE        guifg=NONE
+highlight  LineNr      cterm=NONE        ctermbg=NONE       ctermfg=NONE       guibg=NONE        guifg=NONE
 highlight  Pmenu       cterm=NONE        ctermbg=black      ctermfg=lightblue  guibg=black       guifg=lightblue
 highlight  PmenuSel    ctermbg=black     ctermfg=darkgreen  guibg=black        guifg=lightgreen
 highlight  ColorColumn ctermbg=black     ctermfg=white      guibg=#ff4500
@@ -292,14 +292,20 @@ let g:multi_cursor_quit_key            = '<Esc>'
 highlight multiple_cursors_cursor term=reverse cterm=reverse gui=reverse
 highlight link multiple_cursors_visual Visual
 function! Multiple_cursors_before()
-  if exists(':NeoCompleteLock')==2
-    exe 'NeoCompleteLock'
-  endif
+    let g:ycm_filetype_whitelist = {}
+    let g:ycm_filetype_blacklist = { '*': 1 }
+    if exists(':NeoCompleteLock')==2
+        exe 'NeoCompleteLock'
+    endif
 endfunction
 
 function! Multiple_cursors_after()
-  if exists(':NeoCompleteUnlock')==2
-    exe 'NeoCompleteUnlock'
-  endif
+    let g:ycm_filetype_whitelist = { '*': 1 }
+    let g:ycm_filetype_blacklist = {
+        \ 'html' : 1,
+        \ 'css' : 1 }
+    if exists(':NeoCompleteUnlock')==2
+        exe 'NeoCompleteUnlock'
+    endif
 endfunction
 " }}}

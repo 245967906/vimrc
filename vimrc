@@ -3,7 +3,7 @@
 " pip install flake8
 " vim +PluginInstall +qall
 " cd ~/.vim/bundle/YouCompleteMe/
-" ./install.py
+" python install.py --clang-completer
 
 
 " General {{{
@@ -114,7 +114,7 @@ set completeopt=longest,menu
 
 " Jedi-vim {{{
 let g:jedi#auto_initialization = 1
-let g:jedi#completions_enabled = 1
+let g:jedi#completions_enabled = 0
 let g:jedi#popup_select_first = 0
 let g:jedi#popup_on_dot = 0
 let g:jedi#smart_auto_mappings = 0
@@ -135,7 +135,12 @@ let NERDChristmasTree = 1
 let NERDTreeChDirMode = 1
 let NERDTreeShowHidden = 1
 let NERDTreeShowBookmarks = 1
-let NERDTreeIgnore = ['\~$', '\.pyc$', '\.swp$']
+let NERDTreeIgnore = [
+    \ '__pycache__',
+    \ '\.git',
+    \ '\~$',
+    \ '\.pyc$',
+    \ '\.swp$']
 autocmd StdinReadPre * let s:std_in = 1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif

@@ -1,13 +1,13 @@
 " brew install vim --with-lua --with-override-system-vi
 " pip install yapf
 " pip install flake8
-" vim +PluginInstall +qall
-" cd ~/.vim/bundle/YouCompleteMe/
-" python install.py --clang-completer
+" curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+"     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+" vim +'PlugInstall' +qa
 
 
 " General {{{
-syntax on
+syntax enable
 set nocompatible
 set list
 set listchars=tab:>-,trail:-
@@ -15,8 +15,8 @@ set hlsearch
 set ignorecase
 set incsearch
 set expandtab
-set tabstop=4
 set shiftwidth=4
+set tabstop=4
 set backspace=indent,eol,start
 set number
 set numberwidth=5
@@ -36,17 +36,15 @@ nnoremap <F3> :tabp<CR>
 nnoremap <F4> :tabn<CR>
 nnoremap <F5> :call RunScripts()<CR>
 function! RunScripts()
-    exec "w"
+    exec 'w'
     if &filetype == 'python'
-        exec "!time python3 %"
+        exec '!time python %'
     elseif &filetype == 'sh'
-        exec "!time bash %"
+        exec '!time bash %'
     elseif &filetype == 'html'
-        exec "!open -a 'Google Chrome' %"
+        exec '!open -a "Google Chrome" %'
     endif
 endfunc
-autocmd BufRead,BufNewFile *.vue set filetype=html
-autocmd FileType python match OverLength /\%80v.\+/
 autocmd BufReadPost *
     \ if line("'\"") > 0 |
     \     if line("'\"") <= line("$") |
@@ -55,7 +53,8 @@ autocmd BufReadPost *
     \         exe "norm $" |
     \     endif |
     \ endif
-autocmd FileType html,css,javascript,yaml set
+autocmd FileType python match OverLength /\%80v.\+/
+autocmd FileType html,css,javascript,vue,yaml set
     \ colorcolumn=79
     \ shiftwidth=2
     \ tabstop=2
@@ -66,36 +65,36 @@ autocmd FileType python set
 " }}}
 
 
-" Bundle {{{
-filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
-call vundle#end()
-filetype plugin indent on
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'davidhalter/jedi-vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'mattn/emmet-vim'
-Plugin 'Shougo/neocomplete.vim'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'google/yapf', { 'rtp': 'plugins/vim' }
-Plugin 'Yggdroot/indentLine'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'w0rp/ale'
-Plugin 'nvie/vim-flake8'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'kien/rainbow_parentheses.vim'
-Plugin 'Raimondi/delimitMate'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'terryma/vim-multiple-cursors'
+" Vim-plug {{{
+call plug#begin('~/.vim/plugged')
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
+Plug 'davidhalter/jedi-vim'
+Plug 'scrooloose/nerdtree'
+Plug 'mattn/emmet-vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'google/yapf', { 'rtp': 'plugins/vim', 'for': 'python' }
+Plug 'Yggdroot/indentLine'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'w0rp/ale'
+Plug 'nvie/vim-flake8'
+Plug 'altercation/vim-colors-solarized'
+Plug 'kien/rainbow_parentheses.vim'
+Plug 'Raimondi/delimitMate'
+Plug 'scrooloose/nerdcommenter'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'prettier/vim-prettier', { 'do': 'npm install' }
+Plug 'posva/vim-vue'
+Plug 'iloginow/vim-stylus'
+Plug 'guns/xterm-color-table.vim'
+Plug 'airblade/vim-gitgutter'
+call plug#end()
 " }}}
 
 
 " YouCompleteMe {{{
 let g:ycm_python_binary_path = ''
-let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/.ycm_extra_conf.py'
 let g:ycm_cache_omnifunc = 0
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
@@ -105,18 +104,20 @@ let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_complete_in_comments = 1
 let g:ycm_complete_in_strings = 1
 let g:ycm_filetype_whitelist = { '*': 1 }
-let g:ycm_filetype_blacklist = {
-    \ 'html' : 1,
-    \ 'css' : 1 }
-set completeopt=longest,menu
+let g:ycm_filetype_blacklist = {}
+let g:ycm_semantic_triggers = {
+    \   'python': ['re!(import\s+|from\s+(\S+\s+(import\s+(\w+,\s+)*)?)?)'],
+    \   'css': ['re!(^\s{2,}|:\s+)'],
+    \ }
 " }}}
 
 
 " Jedi-vim {{{
 let g:jedi#auto_initialization = 1
-let g:jedi#completions_enabled = 0
+let g:jedi#completions_enabled = 1
 let g:jedi#popup_select_first = 0
 let g:jedi#popup_on_dot = 0
+let g:jedi#show_call_signatures = 0
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#goto_command = "<C-]>"
 let g:jedi#goto_assignments_command = "<leader>g"
@@ -160,52 +161,18 @@ let g:airline_theme = 'luna'
 " Emmet {{{
 let g:user_emmet_leader_key = '<C-Y>'
 let g:user_emmet_install_global = 0
-autocmd FileType html,css EmmetInstall
-" }}}
-
-
-" Neocomplete {{{
-let g:neocomplete#enable_at_startup = 0
-let g:acp_enableAtStartup = 0
-let g:neocomplete#enable_smart_case = 1
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-    \ }
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-    return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-endfunction
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-autocmd FileType html,css NeoCompleteEnable
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
-endif
-let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+autocmd FileType html,css,vue EmmetInstall
 " }}}
 
 
 " Yapf {{{
-map <C-Y> :YAPF<CR>
+autocmd FileType python map <C-Y> :YAPF<CR>
 " }}}
 
 
 " IndentLine {{{
 let g:indentLine_char = '¦'
+let g:indentLine_setColors = 1
 let g:indentLine_color_term = 239
 let g:indentLine_enabled = 1
 autocmd BufRead,BufEnter,BufNewFile * IndentLinesReset
@@ -247,13 +214,22 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 " Theme {{{
 set background=dark
 set guifont=Monaco\16
-colorscheme solarized
+set t_Co=256
 let g:solarized_termcolors = 256
-highlight  LineNr      cterm=NONE        ctermbg=NONE       ctermfg=NONE       guibg=NONE        guifg=NONE
-highlight  Pmenu       cterm=NONE        ctermbg=black      ctermfg=lightblue  guibg=black       guifg=lightblue
-highlight  PmenuSel    ctermbg=black     ctermfg=darkgreen  guibg=black        guifg=lightgreen
-highlight  ColorColumn ctermbg=black     ctermfg=white      guibg=#ff4500
-highlight  OverLength  ctermbg=red       ctermfg=white      guibg=#592929
+let g:solarized_termtrans  = 1
+let g:solarized_degrade    = 0
+let g:solarized_bold       = 0
+let g:solarized_underline  = 0
+let g:solarized_italic     = 0
+let g:solarized_contrast   = "normal"
+let g:solarized_visibility = "normal"
+colorscheme solarized
+highlight LineNr      ctermbg=NONE  ctermfg=240
+highlight CursorLine  ctermbg=000   ctermfg=NONE
+highlight Pmenu       ctermbg=031   ctermfg=252     cterm=NONE
+highlight PmenuSel    ctermbg=232   ctermfg=002
+highlight ColorColumn ctermbg=052   ctermfg=None
+highlight OverLength  ctermbg=052   ctermfg=255
 " }}}
 
 
@@ -299,18 +275,46 @@ highlight link multiple_cursors_visual Visual
 function! Multiple_cursors_before()
     let g:ycm_filetype_whitelist = {}
     let g:ycm_filetype_blacklist = { '*': 1 }
-    if exists(':NeoCompleteLock')==2
-        exe 'NeoCompleteLock'
-    endif
 endfunction
 
 function! Multiple_cursors_after()
     let g:ycm_filetype_whitelist = { '*': 1 }
-    let g:ycm_filetype_blacklist = {
-        \ 'html' : 1,
-        \ 'css' : 1 }
-    if exists(':NeoCompleteUnlock')==2
-        exe 'NeoCompleteUnlock'
-    endif
+    let g:ycm_filetype_blacklist = {}
 endfunction
+
+
+" Prettier {{{
+let g:prettier#autoformat = 0
+let g:prettier#exec_cmd_path = ""
+let g:prettier#exec_cmd_async = 1
+
+let g:prettier#config#print_width = 80
+let g:prettier#config#tab_width = 2
+let g:prettier#config#use_tabs = 'false'
+let g:prettier#config#semi = 'true'
+let g:prettier#config#single_quote = 'false'
+let g:prettier#config#bracket_spacing = 'true'
+let g:prettier#config#jsx_bracket_same_line = 'false'
+let g:prettier#config#arrow_parens = 'avoid'
+let g:prettier#config#trailing_comma = 'none'
+let g:prettier#config#parser = 'none'
+let g:prettier#config#prose_wrap = 'preserve'
+let g:prettier#config#html_whitespace_sensitivity = 'css'
+
+autocmd FileType html,css,javascript,vue map <C-Y> :Prettier<CR>
+" }}}
+
+
+" Vim-vue {{{
+autocmd BufRead,BufNewFile *.vue set filetype=vue
+autocmd FileType vue syntax sync fromstart
+" }}}
+
+
+" Vim-gitgutter {{{
+set updatetime=100
+let g:gitgutter_enabled = 1
+let g:gitgutter_async = 1
+let g:gitgutter_highlight_lines = 0
+autocmd BufWritePost * GitGutter
 " }}}

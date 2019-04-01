@@ -104,8 +104,8 @@ let g:solarized_visibility = "normal"
 colorscheme solarized
 highlight LineNr      ctermbg=NONE  ctermfg=240
 highlight CursorLine  ctermbg=000   ctermfg=NONE
-highlight Pmenu       ctermbg=031   ctermfg=252     cterm=NONE
-highlight PmenuSel    ctermbg=232   ctermfg=002
+highlight Pmenu       ctermbg=235   ctermfg=252     cterm=NONE
+highlight PmenuSel    ctermbg=232   ctermfg=031
 highlight ColorColumn ctermbg=052   ctermfg=None
 highlight OverLength  ctermbg=052   ctermfg=255
 " }}}

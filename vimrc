@@ -181,6 +181,7 @@ autocmd Syntax * RainbowParenthesesLoadBraces
 
 
 " mattn/emmet-vim {{{
+let g:user_emmet_mode='iv'
 let g:user_emmet_leader_key = '<C-Y>'
 let g:user_emmet_install_global = 0
 autocmd FileType html,css,vue EmmetInstall

@@ -267,7 +267,7 @@ endfunction
 
 " Valloric/YouCompleteMe {{{
 let g:ycm_python_binary_path = ''
-let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = ''
 let g:ycm_cache_omnifunc = 0
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
@@ -276,6 +276,7 @@ let g:ycm_min_num_of_chars_for_completion = 1
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_complete_in_comments = 1
 let g:ycm_complete_in_strings = 1
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_filetype_whitelist = { '*': 1 }
 let g:ycm_filetype_blacklist = {}
 let g:ycm_semantic_triggers = {

@@ -306,6 +306,9 @@ let g:pymode_rope = 0
 let g:ale_emit_conflict_warnings = 0
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
+highlight SignColumn     ctermbg=NONE
+highlight ALEErrorSign   ctermbg=None ctermfg=160
+highlight ALEWarningSign ctermbg=None ctermfg=202
 " }}}
 
 

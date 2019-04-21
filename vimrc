@@ -74,7 +74,6 @@ Plug 'google/yapf', { 'rtp': 'plugins/vim', 'for': 'python' }
 Plug 'guns/xterm-color-table.vim'
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'mattn/emmet-vim'
-Plug 'nvie/vim-flake8'
 Plug 'prettier/vim-prettier', { 'do': 'npm install' }
 Plug 'Raimondi/delimitMate'
 Plug 'scrooloose/nerdcommenter'
@@ -185,10 +184,6 @@ let g:user_emmet_mode='iv'
 let g:user_emmet_leader_key = '<C-Y>'
 let g:user_emmet_install_global = 0
 autocmd FileType html,css,vue EmmetInstall
-" }}}
-
-
-" nvie/vim-flake8 {{{
 " }}}
 
 

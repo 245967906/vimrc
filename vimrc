@@ -62,6 +62,7 @@ autocmd FileType python set
     \ colorcolumn=79
     \ shiftwidth=4
     \ tabstop=4
+autocmd FileType gitcommit set textwidth=72
 " }}}
 
 

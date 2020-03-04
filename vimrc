@@ -39,6 +39,8 @@ function! RunScripts()
     exec 'w'
     if &filetype == 'python'
         exec '!time python %'
+    elseif &filetype == 'go'
+        exec '!time go run %'
     elseif &filetype == 'sh'
         exec '!time bash %'
     elseif &filetype == 'html'
@@ -62,6 +64,9 @@ autocmd FileType python set
     \ colorcolumn=79
     \ shiftwidth=4
     \ tabstop=4
+autocmd FileType go set
+    \ colorcolumn=79
+    \ listchars=tab:\¦\ ,trail:-
 autocmd FileType gitcommit set textwidth=72
 " }}}
 
@@ -71,6 +76,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'altercation/vim-colors-solarized'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'davidhalter/jedi-vim'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'google/yapf', { 'rtp': 'plugins/vim', 'for': 'python' }
 Plug 'guns/xterm-color-table.vim'
 Plug 'kien/rainbow_parentheses.vim'
@@ -80,7 +86,7 @@ Plug 'Raimondi/delimitMate'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --go-completer' }
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'w0rp/ale'
@@ -108,6 +114,7 @@ highlight Pmenu       ctermbg=235   ctermfg=252     cterm=NONE
 highlight PmenuSel    ctermbg=232   ctermfg=031
 highlight ColorColumn ctermbg=052   ctermfg=None
 highlight OverLength  ctermbg=052   ctermfg=255
+highlight SpecialKey  ctermbg=None  ctermfg=064
 " }}}
 
 
@@ -140,6 +147,13 @@ let g:jedi#documentation_command = "<leader>k"
 let g:jedi#usages_command = "<leader>n"
 let g:jedi#completions_command = "<C-x><C-o>"
 let g:jedi#rename_command = "<leader>r"
+" }}}
+
+
+" fatih/vim-go {{{
+let g:go_code_completion_enabled = 1
+let g:go_fmt_autosave = 1
+let g:go_fmt_command = "goimports"
 " }}}
 
 
